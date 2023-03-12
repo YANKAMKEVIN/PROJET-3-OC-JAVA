@@ -13,7 +13,7 @@ public class FakeApiServiceGenerator {
     static List<Meeting> generateMeetings() {
         return new ArrayList<>(FAKE_MEETINGS);
     }
-    static ArrayList<String> participants = (ArrayList<String>) Arrays.asList("Participant 1","Participant 2","Participant 3");
+    static List<String> participants = Arrays.asList("Participant 1","Participant 2","Participant 3");
     public static List<Meeting> FAKE_MEETINGS = Arrays.asList(
             new Meeting("REUNION A", LocalTime.of(9, 30), LocalTime.of(10, 30), LocalDate.of(2023,3,7),"SALLE 1","C'est une reunion qui consistera a revaloriser les personnes handicape et apres voilà ce qui se fait",participants),
             new Meeting("REUNION B", LocalTime.of(8, 30), LocalTime.of(10, 30),LocalDate.of(2023,3,1),"SALLE 2","C'est une reunion qui consistera a revaloriser les personnes handicape et apres voilà ce qui se fait",participants),
