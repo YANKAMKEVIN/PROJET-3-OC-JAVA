@@ -1,7 +1,4 @@
-package com.example.mareu.ui;
-
-import android.graphics.Movie;
-import android.util.Log;
+package com.example.mareu.ui.list;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
