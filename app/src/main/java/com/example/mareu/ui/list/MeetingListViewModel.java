@@ -22,6 +22,10 @@ public class MeetingListViewModel extends ViewModel {
         return _mutableMeetings;
     }
 
+    public void deleteMeeting(Meeting meetingToDelete){
+        repository.deleteMeeting(meetingToDelete);
+    }
+
     // TODO: hilt voir comment utiliser hilt pour faire de l'injection de dependance pour ne plus creer de viewModelFactory, il injectera lui meme le meetingRepository
 
 }
