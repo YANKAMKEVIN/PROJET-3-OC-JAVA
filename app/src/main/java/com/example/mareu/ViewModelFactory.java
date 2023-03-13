@@ -17,6 +17,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         this.meetingRepository = meetingRepository;
     }
 
+    //TODO-- Regarder l'utilisation de synchronise
     public static ViewModelFactory getInstance() {
         if (factory == null) {
             synchronized (ViewModelFactory.class) {
