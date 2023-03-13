@@ -3,6 +3,7 @@ package com.example.mareu.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Meeting {
 
@@ -12,10 +13,10 @@ public class Meeting {
     private LocalDate date;
     private String location;
     private String subject;
-    private ArrayList<String> participants;
+    private List<String> participants;
 
 
-    public Meeting(String name, LocalTime startTime, LocalTime endTime, LocalDate date, String location, String subject, ArrayList<String> participants) {
+    public Meeting(String name, LocalTime startTime, LocalTime endTime, LocalDate date, String location, String subject, List<String> participants) {
         this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -75,11 +76,11 @@ public class Meeting {
         this.subject = subject;
     }
 
-    public ArrayList<String> getParticipants() {
+    public List<String> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(ArrayList<String> participants) {
+    public void setParticipants(List<String> participants) {
         this.participants = participants;
     }
 
