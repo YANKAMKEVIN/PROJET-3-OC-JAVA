@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/meetingListFragment"
-        android:name="com.example.mareu.ui.MeetingListFragment"
+        android:name="com.example.mareu.ui.list.MeetingListFragment"
         android:label="fragment_meeting_list"
         tools:layout="@layout/fragment_meeting_list" />
 </navigation>

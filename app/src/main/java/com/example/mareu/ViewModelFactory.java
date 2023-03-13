@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.mareu.api.FakeApiService;
 import com.example.mareu.repository.MeetingRepository;
-import com.example.mareu.ui.MeetingListViewModel;
+import com.example.mareu.ui.list.MeetingListViewModel;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
