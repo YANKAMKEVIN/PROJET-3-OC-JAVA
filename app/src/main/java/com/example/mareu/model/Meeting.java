@@ -3,6 +3,7 @@ package com.example.mareu.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 
 public class Meeting {
 
@@ -94,4 +95,16 @@ public class Meeting {
         this.participants = participants;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Meeting)) return false;
+        Meeting meeting = (Meeting) o;
+        return getId() == meeting.getId() && getName().equals(meeting.getName()) && getStartTime().equals(meeting.getStartTime()) && getEndTime().equals(meeting.getEndTime()) && getDate().equals(meeting.getDate()) && getLocation().equals(meeting.getLocation()) && getSubject().equals(meeting.getSubject()) && getParticipants().equals(meeting.getParticipants());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, startTime, endTime, date, location, subject, participants);
+    }
 }
