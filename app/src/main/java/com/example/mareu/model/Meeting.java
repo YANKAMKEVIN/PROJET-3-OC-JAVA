@@ -2,11 +2,12 @@ package com.example.mareu.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Meeting {
 
+
+    private int id;
     private String name;
     private LocalTime startTime;
     private LocalTime endTime;
@@ -16,7 +17,8 @@ public class Meeting {
     private List<String> participants;
 
 
-    public Meeting(String name, LocalTime startTime, LocalTime endTime, LocalDate date, String location, String subject, List<String> participants) {
+    public Meeting(int id, String name, LocalTime startTime, LocalTime endTime, LocalDate date, String location, String subject, List<String> participants) {
+        this.id = id;
         this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -27,6 +29,14 @@ public class Meeting {
     }
 
     // --- GETTERS AND SETTERS ---
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
