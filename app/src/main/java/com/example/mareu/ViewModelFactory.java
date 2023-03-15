@@ -22,7 +22,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         if (factory == null) {
             synchronized (ViewModelFactory.class) {
                 if (factory == null) {
-                    factory = new ViewModelFactory(new MeetingRepository(new FakeApiService()));
+                    factory = new ViewModelFactory(new MeetingRepository());
                 }
             }
         }
@@ -38,7 +38,6 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
                     meetingRepository
             );
         }
-
         throw new IllegalArgumentException("Unknown ViewModel class");
     }
 }
