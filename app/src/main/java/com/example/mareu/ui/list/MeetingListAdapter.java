@@ -12,15 +12,14 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mareu.R;
-import com.example.mareu.model.Meeting;
 
 
-public class MeetingListAdapter extends ListAdapter<Meeting, MeetingListAdapter.ViewHolder> {
-    private onMeetingCLickListener lickListener;
+public class MeetingListAdapter extends ListAdapter<MeetingListViewStateItem, MeetingListAdapter.ViewHolder> {
+    private final OnMeetingCLickListener listener;
 
-    public MeetingListAdapter(onMeetingCLickListener lickListener) {
+    public MeetingListAdapter(OnMeetingCLickListener listener) {
         super(new MeetingDiffCallback());
-        this.lickListener = lickListener;
+        this.listener = listener;
     }
 
     @NonNull
@@ -32,35 +31,39 @@ public class MeetingListAdapter extends ListAdapter<Meeting, MeetingListAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Meeting meeting = getItem(position);
-        holder.firstText.setText(meeting.getName());
-        holder.secondText.setText(meeting.getParticipants().toString());
-        holder.imageButton.setOnClickListener(l -> lickListener.onDeleteMeetingClicked(meeting));
+        holder.bind(getItem(position), listener);
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView firstText;
-        public TextView secondText;
-        public ImageButton imageButton;
+        private final TextView firstText;
+        private final TextView secondText;
+        private final ImageButton imageButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
             firstText = itemView.findViewById(R.id.meeting_name_hour_location);
             secondText = itemView.findViewById(R.id.meeting_participants);
             imageButton = itemView.findViewById(R.id.item_list_delete_button);
         }
+
+        public void bind(MeetingListViewStateItem item, OnMeetingCLickListener listener) {
+            firstText.setText(item.getName());
+            secondText.setText(item.getParticipants().toString());
+            imageButton.setOnClickListener(v -> listener.onDeleteMeetingClicked(item.getId()));
+        }
     }
 
-    private static class MeetingDiffCallback extends DiffUtil.ItemCallback<Meeting> {
+    private static class MeetingDiffCallback extends DiffUtil.ItemCallback<MeetingListViewStateItem> {
 
         @Override
-        public boolean areItemsTheSame(@NonNull Meeting oldItem, @NonNull Meeting newItem) {
+        public boolean areItemsTheSame(@NonNull MeetingListViewStateItem oldItem, @NonNull MeetingListViewStateItem newItem) {
             return oldItem.getId() == newItem.getId();
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull Meeting oldItem, @NonNull Meeting newItem) {
+        public boolean areContentsTheSame(@NonNull MeetingListViewStateItem oldItem, @NonNull MeetingListViewStateItem newItem) {
             return oldItem.equals(newItem);
         }
     }

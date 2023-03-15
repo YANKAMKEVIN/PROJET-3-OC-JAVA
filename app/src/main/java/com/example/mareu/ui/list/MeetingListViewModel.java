@@ -1,29 +1,45 @@
 package com.example.mareu.ui.list;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.example.mareu.model.Meeting;
 import com.example.mareu.repository.MeetingRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MeetingListViewModel extends ViewModel {
-    private MeetingRepository repository;
-    private MutableLiveData<List<Meeting>> _mutableMeetings = new MutableLiveData<>();
+    @NonNull
+    private MeetingRepository meetingRepository;
 
-    //TODO EST CE QUE LE SETVALUE DOIT SE FAIRE DANS LE CONSTRUCTEUR
-    public MeetingListViewModel(MeetingRepository meetingRepository) {
-        this.repository = meetingRepository;
-        _mutableMeetings.setValue(repository.getMeetings());
-    }
-    public LiveData<List<Meeting>> getMeetings() {
-        return _mutableMeetings;
+
+    public MeetingListViewModel(@NonNull MeetingRepository meetingRepository) {
+        this.meetingRepository = meetingRepository;
     }
 
-    public void deleteMeeting(Meeting meetingToDelete){
-        repository.deleteMeeting(meetingToDelete);
+    public LiveData<List<MeetingListViewStateItem>> getMeetingListViewStateItemLiveData() {
+        return Transformations.map(meetingRepository.getMeetingsLiveData(), meetings -> {
+            List<MeetingListViewStateItem> meetingsViewStateItems = new ArrayList<>();
+            for (Meeting meeting : meetings) {
+                meetingsViewStateItems.add(
+                        new MeetingListViewStateItem(
+                                meeting.getId(),
+                                meeting.getName(),
+                                meeting.getParticipants()
+                        )
+                );
+            }
+            return meetingsViewStateItems;
+        });
+    }
+
+    public void onDeleteMeetingClicked(long meetingId) {
+        meetingRepository.deleteMeeting(meetingId);
     }
 
     // TODO: hilt voir comment utiliser hilt pour faire de l'injection de dependance pour ne plus creer de viewModelFactory, il injectera lui meme le meetingRepository
