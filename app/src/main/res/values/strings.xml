@@ -1,6 +1,12 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">MaReu</string>
 
     <string name="add_neighbour">Ajouter une reunion</string>
     <string name="delete_neighbour">Supprimer la reunion</string>
+    <string name="name">Nom de la reunion</string>
+    <string name="location">Lieu de la reunion</string>
+    <string name="subject">Sujet de la reunion</string>
+    <string name="participants">Participants de la reunion</string>
+    <string name="hour">Heure de la reunion</string>
+    <string name="save">Enregistrer la reunion</string>
 </resources>
