@@ -22,7 +22,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         if (factory == null) {
             synchronized (ViewModelFactory.class) {
                 if (factory == null) {
-                    factory = new ViewModelFactory(new MeetingRepository());
+                    factory = new ViewModelFactory(new MeetingRepository(new FakeApiService()));
                 }
             }
         }
