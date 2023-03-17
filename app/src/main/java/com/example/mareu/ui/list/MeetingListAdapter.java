@@ -49,7 +49,7 @@ public class MeetingListAdapter extends ListAdapter<MeetingListViewStateItem, Me
         }
 
         public void bind(MeetingListViewStateItem item, OnMeetingCLickListener listener) {
-            firstText.setText(item.getName());
+            firstText.setText(String.join(" - ", item.getName(), item.getStartTime().toString(), item.getLocation()));
             secondText.setText(item.getParticipants().toString());
             imageButton.setOnClickListener(v -> listener.onDeleteMeetingClicked(item.getId()));
         }
