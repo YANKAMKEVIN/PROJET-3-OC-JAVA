@@ -1,7 +1,5 @@
 package com.example.mareu.ui.list;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
@@ -30,6 +28,8 @@ public class MeetingListViewModel extends ViewModel {
                         new MeetingListViewStateItem(
                                 meeting.getId(),
                                 meeting.getName(),
+                                meeting.getLocation(),
+                                meeting.getStartTime(),
                                 meeting.getParticipants()
                         )
                 );
