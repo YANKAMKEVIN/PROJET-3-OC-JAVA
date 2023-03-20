@@ -6,8 +6,6 @@ import java.util.Objects;
 
 
 public class MeetingListViewStateItem {
-
-    //TODO demander si je dois utiliser LocalTime ou plutot juste TIme, pareil pour date
     private long id;
     private String name;
     private String location;
