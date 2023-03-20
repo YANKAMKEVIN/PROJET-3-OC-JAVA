@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.mareu.api.FakeApiService;
 import com.example.mareu.repository.MeetingRepository;
+import com.example.mareu.ui.add.AddMeetingViewModel;
 import com.example.mareu.ui.list.MeetingListViewModel;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
@@ -37,6 +38,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new MeetingListViewModel(
                     meetingRepository
             );
+        } else if (modelClass.isAssignableFrom(AddMeetingViewModel.class)) {
+            return (T) new AddMeetingViewModel(
+                    meetingRepository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }
