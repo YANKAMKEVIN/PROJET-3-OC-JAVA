@@ -9,4 +9,20 @@
     <string name="participants">Participants de la reunion</string>
     <string name="hour">Heure de la reunion</string>
     <string name="save">Enregistrer la reunion</string>
+    <string name="date_de_la_reunion">Date de la reunion</string>
+    <string name="heure_de_la_reunion">Heure de la reunion</string>
+    <string name="il_n_y_a_aucun_participants_d_enregistr">Il n\'y a aucun participants d\'enregistré</string>
+
+    <string-array name="salles">
+        <item>Salle 1</item>
+        <item>Salle 2</item>
+        <item>Salle 3</item>
+        <item>Salle 4</item>
+        <item>Salle 5</item>
+        <item>Salle 6</item>
+        <item>Salle 7</item>
+        <item>Salle 8</item>
+        <item>Salle 9</item>
+        <item>Salle 10</item>
+    </string-array>
 </resources>
