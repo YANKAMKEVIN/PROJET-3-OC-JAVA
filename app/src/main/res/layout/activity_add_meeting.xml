@@ -51,7 +51,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/add_meeting_address_til"
+            android:id="@+id/ad_meeting_subject_til"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
             app:layout_constraintTop_toBottomOf="@id/add_meeting_location_til">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/add_meeting_address_tiet"
+                android:id="@+id/ad_meeting_subject_tiet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/subject"
@@ -81,8 +81,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/participants"
-                android:inputType="textMultiLine"
-                android:minLines="1"
+                android:inputType="textEmailAddress|textNoSuggestions|textFilter"
+                android:digits="0123456789qwertzuiopasdfghjklyxcvbnm@."                android:maxLines="1"
                 android:paddingBottom="30dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -102,13 +102,13 @@
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="21dp"
             android:enabled="false"
             android:text="@string/save"
             app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_meeting_about_me_til" />
+            app:layout_constraintTop_toBottomOf="@+id/add_meeting_participants_list" />
 
         <ImageButton
             android:id="@+id/add_meeting_date_picker_button"
@@ -118,17 +118,17 @@
             android:ems="10"
             android:src="@drawable/baseline_calendar_month_24"
             app:layout_constraintStart_toEndOf="@+id/add_meeting_date_picker_text"
-            app:layout_constraintTop_toBottomOf="@+id/add_meeting_address_til" />
+            app:layout_constraintTop_toBottomOf="@+id/ad_meeting_subject_til" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/add_meeting_date_picker_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="Heure de la reunion"
+            android:hint="@string/date_de_la_reunion"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/add_meeting_address_til" />
+            app:layout_constraintTop_toBottomOf="@+id/ad_meeting_subject_til" />
 
         <ImageButton
             android:id="@+id/add_meeting_time_picker_button"
@@ -146,10 +146,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:hint="Date de la reunion"
+            android:hint="@string/heure_de_la_reunion"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/add_meeting_date_picker_text" />
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/add_meeting_participants_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/il_n_y_a_aucun_participants_d_enregistr"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/add_meeting_about_me_til" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/add_meeting_button" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
