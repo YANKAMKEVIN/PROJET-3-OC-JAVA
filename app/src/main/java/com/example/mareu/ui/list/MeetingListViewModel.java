@@ -2,6 +2,7 @@ package com.example.mareu.ui.list;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
@@ -30,7 +31,8 @@ public class MeetingListViewModel extends ViewModel {
                                 meeting.getName(),
                                 meeting.getLocation(),
                                 meeting.getStartTime(),
-                                meeting.getParticipants()
+                                meeting.getParticipants(),
+                                meeting.getDate()
                         )
                 );
             }
@@ -41,6 +43,28 @@ public class MeetingListViewModel extends ViewModel {
     public void onDeleteMeetingClicked(long meetingId) {
         meetingRepository.deleteMeeting(meetingId);
     }
+
+    public LiveData<List<MeetingListViewStateItem>> getMeetingListViewStateItemLiveDataByLocation(String location) {
+        return Transformations.map(meetingRepository.getMeetingsLiveData(), meetings -> {
+            List<MeetingListViewStateItem> meetingsViewStateItems = new ArrayList<>();
+            for (Meeting meeting : meetings) {
+                if (meeting.getLocation().equalsIgnoreCase(location)) {
+                    meetingsViewStateItems.add(
+                            new MeetingListViewStateItem(
+                                    meeting.getId(),
+                                    meeting.getName(),
+                                    meeting.getLocation(),
+                                    meeting.getStartTime(),
+                                    meeting.getParticipants(),
+                                    meeting.getDate()
+                            )
+                    );
+                }
+            }
+            return meetingsViewStateItems;
+        });
+    }
+
 
     // TODO: hilt voir comment utiliser hilt pour faire de l'injection de dependance pour ne plus creer de viewModelFactory, il injectera lui meme le meetingRepository
 
