@@ -12,4 +12,18 @@
     <color name="colorSecondary">#FF80AB</color>
     <color name="star">#EAD200</color>
     <color name="light_grey">#EEEEEE</color>
+    <color name="your_darker_color">#3F3F3F</color>
+
+
+    <!-- Meetings colors-->
+    <color name="room_one">#DAF1C9</color>
+    <color name="room_two">#F5C9F6</color>
+    <color name="room_three">#B6B6B6</color>
+    <color name="room_four">#DCC6F1</color>
+    <color name="room_five">#F6E6B0</color>
+    <color name="room_six">#AFE4C4</color>
+    <color name="room_seven">#FBD3BC</color>
+    <color name="room_eight">#BFF3F3</color>
+    <color name="room_nine">#9CC5F4</color>
+    <color name="room_ten">#FBB9B9</color>
 </resources>
