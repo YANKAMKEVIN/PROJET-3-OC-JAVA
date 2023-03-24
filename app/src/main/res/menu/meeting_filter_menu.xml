@@ -1,14 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
-        android:id="@+id/action_filter_by_location"
-        android:title="Filtrer par lieu"
-        app:showAsAction="never" />
+        android:id="@+id/menu_filter"
+        android:icon="@drawable/baseline_filter_list_24"
+        android:contentDescription="@string/filter_meetings"
+        android:title="@string/filter_meetings"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/action_filter_by_location"
+                android:icon="@drawable/baseline_location_on_24"
+                android:contentDescription="@string/filter_by_location"
+                android:title="@string/filter_by_location"
+                app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_filter_by_date"
-        android:title="Filtrer par Date"
-        app:showAsAction="never" />
+            <item
+                android:id="@+id/action_filter_by_date"
+                android:icon="@drawable/baseline_calendar_month_24"
+                android:contentDescription="@string/filter_by_date"
+                android:title="@string/filter_by_date"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/action_reset_filter"
+                android:icon="@drawable/baseline_refresh_24"
+                android:contentDescription="@string/remove_filters"
+                android:title="@string/remove_filters"
+                app:showAsAction="never" />
+        </menu>
+
+    </item>
 </menu>
