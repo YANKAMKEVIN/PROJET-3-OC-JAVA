@@ -1,17 +1,22 @@
 package com.example.mareu.ui.list;
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mareu.R;
+import com.example.mareu.utils.LocationHelper;
 
 
 public class MeetingListAdapter extends ListAdapter<MeetingListViewStateItem, MeetingListAdapter.ViewHolder> {
@@ -36,22 +41,28 @@ public class MeetingListAdapter extends ListAdapter<MeetingListViewStateItem, Me
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView firstText;
-        private final TextView secondText;
+        private final TextView meetingInfos;
+        private final TextView participants;
         private final ImageButton imageButton;
+        private ImageView imageCircle;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            firstText = itemView.findViewById(R.id.meeting_name_hour_location);
-            secondText = itemView.findViewById(R.id.meeting_participants);
+            meetingInfos = itemView.findViewById(R.id.meeting_name_hour_location);
+            participants = itemView.findViewById(R.id.meeting_participants);
             imageButton = itemView.findViewById(R.id.item_list_delete_button);
+            imageCircle = itemView.findViewById(R.id.room_color);
         }
 
         public void bind(MeetingListViewStateItem item, OnMeetingCLickListener listener) {
-            firstText.setText(String.join(" - ", item.getName(), item.getStartTime().toString(), item.getLocation()));
-            secondText.setText(item.getParticipants().toString());
+            meetingInfos.setText(String.join(" - ", item.getName(), item.getStartTime().toString(), item.getLocation()));
+            String participantsString = item.getParticipants().toString();
+            participantsString = participantsString.substring(1, participantsString.length() - 1);
+            participants.setText(participantsString);
             imageButton.setOnClickListener(v -> listener.onDeleteMeetingClicked(item.getId()));
+            Drawable drawable = ContextCompat.getDrawable(itemView.getContext(), R.drawable.room);
+            drawable.setColorFilter(ContextCompat.getColor(itemView.getContext(), LocationHelper.getColorIdFromLocation(item.getLocation())), PorterDuff.Mode.SRC_IN);
+            imageCircle.setBackground(drawable);
         }
     }
 
