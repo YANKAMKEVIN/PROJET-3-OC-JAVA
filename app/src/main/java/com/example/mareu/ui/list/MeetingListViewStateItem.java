@@ -68,7 +68,6 @@ public class MeetingListViewStateItem {
     public List<String> getParticipants() {
         return participants;
     }
-
     public void setParticipants(List<String> participants) {
         this.participants = participants;
     }
