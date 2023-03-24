@@ -1,19 +1,30 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">MaReu</string>
 
-    <string name="add_neighbour">Ajouter une reunion</string>
     <string name="delete_neighbour">Supprimer la reunion</string>
     <string name="name">Nom de la reunion</string>
     <string name="location">Lieu de la reunion</string>
     <string name="subject">Sujet de la reunion</string>
-    <string name="participants">Participants de la reunion</string>
-    <string name="hour">Heure de la reunion</string>
+    <string name="participants">Saisir le mail d\'un nouveau participant</string>
+    <string name="hour">Entrer l\'heure de la reunion</string>
     <string name="save">Enregistrer la reunion</string>
-    <string name="date_de_la_reunion">Date de la reunion</string>
-    <string name="heure_de_la_reunion">Heure de la reunion</string>
-    <string name="il_n_y_a_aucun_participants_d_enregistr">Il n\'y a aucun participants d\'enregistré</string>
+    <string name="date">Entrez la date de la reunion</string>
+    <string name="no_participants_saved">Il n\'y a aucun participants d\'enregistré</string>
 
-    <string-array name="salles">
+    <!-- content descritption strings-->
+    <string name="remove_filters">Retirer les filtres</string>
+    <string name="filter_by_date">Filtrer par Date</string>
+    <string name="filter_by_location">Filtrer par lieu</string>
+    <string name="filter_meetings">Filtrer les réunions</string>
+    <string name="add_meeting">Ajouter une reunion</string>
+    <string name="delete_meeting">Supprimer une reunion</string>
+    <string name="add_participants">Ajouter un participant</string>
+    <string name="delete_participants">Supprimer un participant</string>
+    <string name="select_date">Choissisez la date de la reunion</string>
+    <string name="select_time">Choissisez l\'heure de la reunion</string>
+
+
+    <string-array name="rooms">
         <item>Salle 1</item>
         <item>Salle 2</item>
         <item>Salle 3</item>
