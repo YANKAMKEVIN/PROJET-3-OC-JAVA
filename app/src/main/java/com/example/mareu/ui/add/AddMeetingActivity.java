@@ -17,8 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.mareu.R;
-import com.example.mareu.ViewModelFactory;
 import com.example.mareu.databinding.ActivityAddMeetingBinding;
+import com.example.mareu.utils.ViewModelFactory;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
@@ -27,14 +29,15 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.List;
 import java.util.Objects;
 
 public class AddMeetingActivity extends AppCompatActivity {
 
+    private static final int DELAY_MILLISECONDS = 1000;
     private ActivityAddMeetingBinding binding;
     private LocalDate selectedDate;
     private LocalTime selectedTime;
+    AddMeetingViewModel mViewModel;
 
     public static Intent navigate(Context context) {
         return new Intent(context, AddMeetingActivity.class);
@@ -45,28 +48,59 @@ public class AddMeetingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityAddMeetingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        AddMeetingViewModel mViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(AddMeetingViewModel.class);
-        setupParticipantsObserver(mViewModel);
+        mViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(AddMeetingViewModel.class);
+        setupParticipantsObserver();
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        setupLocationAdapter();
+        setupDatePicker();
+        setupTimePicker();
+        setupTextWatchers();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, getResources().getStringArray(R.array.salles));
-        binding.addMeetingLocationTiet.setAdapter(adapter);
 
-        binding.addMeetingDatePickerButton.setOnClickListener(view -> {
-            MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-                    .setTitleText("Select Date")
-                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                    .build();
-
-            datePicker.show(getSupportFragmentManager(), "Material_Date_Picker");
-            datePicker.addOnPositiveButtonClickListener(selection -> {
-                long selectedDateInMillis = selection;
-                selectedDate = Instant.ofEpochMilli(selectedDateInMillis).atZone(ZoneId.systemDefault()).toLocalDate();
-                binding.addMeetingDatePickerText.setText(datePicker.getHeaderText());
-            });
+        binding.addMeetingParticipantsButton.setOnClickListener(view -> {
+            String newParticipant = Objects.requireNonNull(binding.addMeetingAboutMeTiet.getText()).toString().trim();
+            mViewModel.addParticipant(newParticipant);
+            binding.addMeetingAboutMeTiet.setText("");
         });
 
+        binding.refreshMeetingParticipantsButton.setOnClickListener(v -> {
+            mViewModel.resetParticipantsList();
+            binding.addMeetingParticipantsList.setText("");
+        });
+
+        mViewModel.getErrorMessageLiveData().observe(this, errorMessage -> {
+            if (errorMessage != null) {
+                Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                mViewModel.resetErrorMessage();
+            }
+        });
+    }
+
+    private void setupTextWatchers() {
+        TextWatcher watcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                updateUI();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        };
+        binding.addMeetingLocationTiet.addTextChangedListener(watcher);
+        binding.adMeetingSubjectTiet.addTextChangedListener(watcher);
+        binding.addMeetingDatePickerText.addTextChangedListener(watcher);
+        binding.addMeetingTimePickerText.addTextChangedListener(watcher);
+        binding.addMeetingParticipantsList.addTextChangedListener(watcher);
+        binding.addMeetingNameTiet.addTextChangedListener(watcher);
+    }
+
+    private void setupTimePicker() {
         binding.addMeetingTimePickerButton.setOnClickListener(view -> {
             MaterialTimePicker timePicker = new MaterialTimePicker.Builder()
                     .setTimeFormat(TimeFormat.CLOCK_24H)
@@ -82,87 +116,71 @@ public class AddMeetingActivity extends AppCompatActivity {
                 binding.addMeetingTimePickerText.setText(String.format("%02d:%02d", hour, minute));
             });
         });
-        TextWatcher watcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+    }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateUI(mViewModel);
-            }
+    private void setupDatePicker() {
+        binding.addMeetingDatePickerButton.setOnClickListener(view -> {
+            // Construisez la contrainte pour n'autoriser que les dates à partir d'aujourd'hui
+            CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder();
+            constraintsBuilder.setValidator(DateValidatorPointForward.now());
 
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        };
+            // Créez le sélecteur de date avec la contrainte
+            MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Select Date")
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                    .setCalendarConstraints(constraintsBuilder.build())
+                    .build();
 
-        binding.addMeetingParticipantsButton.setOnClickListener(view -> {
-            String newParticipant = Objects.requireNonNull(binding.addMeetingAboutMeTiet.getText()).toString().trim();
-            mViewModel.addParticipant(newParticipant);
-            binding.addMeetingAboutMeTiet.setText("");
-        });
-
-        binding.addMeetingLocationTiet.addTextChangedListener(watcher);
-        binding.adMeetingSubjectTiet.addTextChangedListener(watcher);
-        binding.addMeetingDatePickerText.addTextChangedListener(watcher);
-        binding.addMeetingTimePickerText.addTextChangedListener(watcher);
-        binding.addMeetingParticipantsList.addTextChangedListener(watcher);
-        binding.addMeetingNameTiet.addTextChangedListener(watcher);
-
-        mViewModel.getErrorMessageLiveData().observe(this, errorMessage -> {
-            if (errorMessage != null) {
-                Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
-                mViewModel.resetErrorMessage();
-            }
+            datePicker.show(getSupportFragmentManager(), "Material_Date_Picker");
+            datePicker.addOnPositiveButtonClickListener(selection -> {
+                long selectedDateInMillis = selection;
+                selectedDate = Instant.ofEpochMilli(selectedDateInMillis).atZone(ZoneId.systemDefault()).toLocalDate();
+                binding.addMeetingDatePickerText.setText(datePicker.getHeaderText());
+            });
         });
     }
 
-    private void updateUI(AddMeetingViewModel mViewModel) {
+    private void setupLocationAdapter() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, getResources().getStringArray(R.array.rooms));
+        binding.addMeetingLocationTiet.setAdapter(adapter);
+    }
+
+    private void updateUI() {
         String location = binding.addMeetingLocationTiet.getText().toString();
         String subject = binding.adMeetingSubjectTiet.getText().toString();
         String meetingName = binding.addMeetingNameTiet.getText().toString();
         String datePickerText = binding.addMeetingDatePickerText.getText().toString();
         String timePickerText = binding.addMeetingTimePickerText.getText().toString();
         String participantsList = binding.addMeetingParticipantsList.getText().toString();
-        boolean allFieldsFilled = mViewModel.areAllFieldsFilled(location, subject, meetingName, datePickerText, timePickerText, participantsList);
+        boolean allFieldsFilled = mViewModel.areAllFieldsFilled(meetingName, location, subject, datePickerText, timePickerText, participantsList);
+        binding.addMeetingButton.setEnabled(allFieldsFilled);
 
-        if (allFieldsFilled) {
-            binding.addMeetingButton.setEnabled(true);
-            binding.addMeetingButton.setOnClickListener(view -> {
-                // Affichez la ProgressBar
-                binding.progressBar.setVisibility(View.VISIBLE);
+        binding.addMeetingButton.setOnClickListener(view -> {
+            mViewModel.createAndAddMeeting(meetingName, selectedDate, selectedTime, location, subject, Objects.requireNonNull(mViewModel.getParticipantsLiveData().getValue()),
+                    () -> {
+                        if (TextUtils.isEmpty(mViewModel.getErrorMessageLiveData().getValue())) {
+                            // Afficher la ProgressBar
+                            binding.progressBar.setVisibility(View.VISIBLE);
+                            // Afficher un message Toast
+                            Toast.makeText(getApplicationContext(), "Réunion enregistrée", Toast.LENGTH_SHORT).show();
 
-                // Enregistrez la réunion et utilisez le rappel pour gérer la suite
-                mViewModel.onAddButtonClicked(meetingName,
-                        selectedTime,
-                        selectedDate,
-                        location,
-                        subject,
-                        (List<String>) Objects.requireNonNull(mViewModel.getParticipantsLiveData().getValue()),
-                        () -> {
-                            // Affichez un message Toast
-                            Toast.makeText(getApplicationContext(), "Enregistrement de la réunion", Toast.LENGTH_SHORT).show();
-
-                            // Attendez une seconde avant de cacher la ProgressBar et de revenir à l'activité précédente
+                            // Cacher la ProgressBar et retourner à l'activité précédente après un délai de 1 seconde
                             new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                                // Cachez la ProgressBar
                                 binding.progressBar.setVisibility(View.GONE);
-
-                                // Revenez à l'activité précédente
                                 finish();
-                            }, 1000); // 1000 milliseconds (1 second)
-                        });
-            });
-        } else {
-            binding.addMeetingButton.setEnabled(false);
-        }
+                            }, DELAY_MILLISECONDS); // 1000 millisecondes (1 seconde)
+                        }
+                    });
+        });
     }
 
-    private void setupParticipantsObserver(AddMeetingViewModel mViewModel) {
+
+    private void setupParticipantsObserver() {
         mViewModel.getParticipantsLiveData().observe(this, participants -> {
-            String participantsText = "Liste des participants: \n" + TextUtils.join("\n", participants);
-            binding.addMeetingParticipantsList.setText(participantsText);
+            if (participants.size() > 0) {
+                String participantsText = "Liste des participants: \n" + TextUtils.join("\n", participants);
+                binding.addMeetingParticipantsList.setText(participantsText);
+            }
         });
     }
 
@@ -176,4 +194,3 @@ public class AddMeetingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 }
-

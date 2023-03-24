@@ -18,7 +18,7 @@ public class FakeApiServiceGenerator {
             String name = "REUNION " + (char) ('A' + i);
             LocalTime startTime = LocalTime.of((int) (Math.random() * 24), (int) (Math.random() * 60));
             LocalDate date = LocalDate.now().plusDays((int) (Math.random() * 30));
-            String location = "SALLE " + (int) (Math.random() * 10);
+            String location = "Salle " + (int) ((Math.random() * 10) +1);
             String subject = "C'est une réunion qui consiste à revaloriser les personnes handicapées et après voilà ce qui se fait";
             meetings.add(new Meeting(i, name, startTime, date, location, subject, participants));
         }
