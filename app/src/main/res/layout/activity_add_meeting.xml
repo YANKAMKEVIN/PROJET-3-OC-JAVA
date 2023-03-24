@@ -14,22 +14,36 @@
         android:paddingEnd="@dimen/activity_horizontal_margin"
         android:paddingBottom="16dp">
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/add_meeting_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nouvelle_reunion"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/add_meeting_name_til"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/add_meeting_title_text">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/add_meeting_name_tiet"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:hint="@string/name"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:textColorHint="#D82C2C" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -46,8 +60,8 @@
                 android:id="@+id/add_meeting_location_tiet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textAutoComplete"
-                android:hint="@string/location" />
+                android:hint="@string/location"
+                android:inputType="textAutoComplete" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -65,7 +79,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/subject"
-                android:inputType="text" />
+                android:inputType="text"
+                android:textColorHint="#757575" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -73,6 +88,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
+            app:startIconDrawable="@drawable/baseline_person_add_alt_1_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/add_meeting_time_picker_button">
 
@@ -80,22 +96,43 @@
                 android:id="@+id/add_meeting_about_me_tiet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:digits="0123456789qwertzuiopasdfghjklyxcvbnm@."
                 android:hint="@string/participants"
                 android:inputType="textEmailAddress|textNoSuggestions|textFilter"
-                android:digits="0123456789qwertzuiopasdfghjklyxcvbnm@."                android:maxLines="1"
-                android:paddingBottom="30dp" />
+                android:maxLines="1"
+                android:paddingBottom="30dp"
+                android:textColorHint="#757575" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton
             android:id="@+id/add_meeting_participants_button"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/add_participants"
             android:ems="10"
             android:src="@drawable/baseline_add_24"
             app:layout_constraintBottom_toBottomOf="@+id/add_meeting_about_me_til"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/add_meeting_about_me_til"
             app:layout_constraintTop_toTopOf="@+id/add_meeting_about_me_til" />
+
+        <ImageButton
+            android:id="@+id/refresh_meeting_participants_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/delete_participants"
+            android:ems="10"
+            android:src="@drawable/baseline_refresh_24"
+            app:layout_constraintBottom_toBottomOf="@+id/add_meeting_about_me_til"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/add_meeting_participants_button"
+            app:layout_constraintTop_toTopOf="@+id/add_meeting_about_me_til" />
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/add_meeting_button"
@@ -103,6 +140,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="21dp"
+            android:contentDescription="@string/save"
             android:enabled="false"
             android:text="@string/save"
             app:cornerRadius="16dp"
@@ -112,12 +150,14 @@
 
         <ImageButton
             android:id="@+id/add_meeting_date_picker_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginStart="18dp"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/select_date"
             android:ems="10"
             android:src="@drawable/baseline_calendar_month_24"
-            app:layout_constraintStart_toEndOf="@+id/add_meeting_date_picker_text"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ad_meeting_subject_til" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -125,20 +165,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="@string/date_de_la_reunion"
+            android:hint="@string/date"
             android:textSize="20sp"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ad_meeting_subject_til" />
 
         <ImageButton
             android:id="@+id/add_meeting_time_picker_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginStart="30dp"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/select_time"
             android:ems="10"
             android:inputType="time"
             android:src="@drawable/baseline_access_time_24"
-            app:layout_constraintStart_toEndOf="@+id/add_meeting_time_picker_text"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/add_meeting_date_picker_button" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -146,7 +189,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:hint="@string/heure_de_la_reunion"
+            android:textColor="@android:color/black"
+            android:hint="@string/hour"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/add_meeting_date_picker_text" />
@@ -156,7 +200,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="@string/il_n_y_a_aucun_participants_d_enregistr"
+            android:textColor="@android:color/black"
+            android:hint="@string/no_participants_saved"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/add_meeting_about_me_til" />

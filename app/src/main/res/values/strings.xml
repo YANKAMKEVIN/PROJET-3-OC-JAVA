@@ -22,6 +22,7 @@
     <string name="delete_participants">Supprimer un participant</string>
     <string name="select_date">Choissisez la date de la reunion</string>
     <string name="select_time">Choissisez l\'heure de la reunion</string>
+    <string name="nouvelle_reunion">NOUVELLE REUNION</string>
 
 
     <string-array name="rooms">
