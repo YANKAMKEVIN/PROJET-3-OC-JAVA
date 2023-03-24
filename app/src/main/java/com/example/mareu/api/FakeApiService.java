@@ -3,21 +3,19 @@ package com.example.mareu.api;
 import static com.example.mareu.api.FakeApiServiceGenerator.generateMeetings;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.mareu.model.Meeting;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class FakeApiService implements ApiService {
 
-    private List<Meeting> meetings = generateMeetings();
+    private final List<Meeting> meetings = generateMeetings();
     private final MutableLiveData<List<Meeting>> meetingsLiveData = new MutableLiveData<>(new ArrayList<>());
 
     private long maxId = 0;
@@ -26,33 +24,44 @@ public class FakeApiService implements ApiService {
         return meetingsLiveData;
     }
 
-    public void addMeeting(
-            @NonNull String name,
-            @NonNull LocalTime startTime,
-            @Nullable LocalDate date,
-            @Nullable String location,
-            @Nullable String subject,
-            @Nullable List<String> participants
+    public void addMeeting(@NonNull Meeting meeting) {
+        // Vérification de la validité des paramètres
+        if (meeting.getName().trim().isEmpty()) {
+            return;
+        }
 
-    ) {
+        // Vérification de la date
+        if (meeting.getDate() != null && meeting.getDate().isBefore(LocalDate.now())) {
+            return;
+        }
+
+        // Vérification de la validité des participants
+        if (meeting.getParticipants() != null) {
+            List<String> validParticipants = new ArrayList<>();
+            for (String participant : meeting.getParticipants()) {
+                if (participant != null && !participant.trim().isEmpty()) {
+                    validParticipants.add(participant.trim());
+                }
+            }
+            if (validParticipants.isEmpty()) {
+                return;
+            }
+            meeting.setParticipants(validParticipants);
+        }
+
         List<Meeting> meetings = meetingsLiveData.getValue();
+        if (meetings == null) {
+            return;
+        }
 
-        if (meetings == null) return;
-
-        meetings.add(
-                new Meeting(
-                        maxId++,
-                        name,
-                        startTime,
-                        date,
-                        location,
-                        subject,
-                        participants
-                )
-        );
+        // Affecter un nouvel ID au meeting avant de l'ajouter à la liste
+        meeting.setId(maxId++);
+        meetings.add(meeting);
 
         meetingsLiveData.setValue(meetings);
     }
+
+
 
     public void deleteMeeting(long meetingId) {
         List<Meeting> meetings = meetingsLiveData.getValue();
@@ -71,9 +80,8 @@ public class FakeApiService implements ApiService {
     }
 
     public void generateFakeMeetings() {
-        List<Meeting> fakeMeetings = generateMeetings();
-           for (Meeting meeting:fakeMeetings){
-            addMeeting(meeting.getName(), meeting.getStartTime(), meeting.getDate(), meeting.getLocation(), meeting.getSubject(), meeting.getParticipants());
+           for (Meeting meeting:meetings){
+            addMeeting(meeting);
         }
     }
 }
