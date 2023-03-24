@@ -7,7 +7,6 @@ import java.util.Objects;
 
 public class Meeting {
 
-
     private long id;
     private String name;
     private LocalTime startTime;
@@ -19,6 +18,15 @@ public class Meeting {
 
     public Meeting(long id, String name, LocalTime startTime, LocalDate date, String location, String subject, List<String> participants) {
         this.id = id;
+        this.name = name;
+        this.startTime = startTime;
+        this.date = date;
+        this.location = location;
+        this.subject = subject;
+        this.participants = participants;
+    }
+
+    public Meeting(String name, LocalTime startTime, LocalDate date, String location, String subject, List<String> participants) {
         this.name = name;
         this.startTime = startTime;
         this.date = date;
