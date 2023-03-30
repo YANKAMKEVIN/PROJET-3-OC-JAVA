@@ -1,5 +1,7 @@
 package com.example.mareu.ui.add;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,27 +10,26 @@ import android.os.Looper;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.mareu.R;
 import com.example.mareu.databinding.ActivityAddMeetingBinding;
 import com.example.mareu.utils.ViewModelFactory;
-import com.google.android.material.datepicker.CalendarConstraints;
-import com.google.android.material.datepicker.DateValidatorPointForward;
-import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.timepicker.MaterialTimePicker;
-import com.google.android.material.timepicker.TimeFormat;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.Objects;
 
 public class AddMeetingActivity extends AppCompatActivity {
@@ -38,6 +39,10 @@ public class AddMeetingActivity extends AppCompatActivity {
     private LocalDate selectedDate;
     private LocalTime selectedTime;
     AddMeetingViewModel mViewModel;
+    @Nullable
+    private Integer pickedStartHour;
+    @Nullable
+    private Integer pickedStartMinute;
 
     public static Intent navigate(Context context) {
         return new Intent(context, AddMeetingActivity.class);
@@ -59,9 +64,9 @@ public class AddMeetingActivity extends AppCompatActivity {
 
 
         binding.addMeetingParticipantsButton.setOnClickListener(view -> {
-            String newParticipant = Objects.requireNonNull(binding.addMeetingAboutMeTiet.getText()).toString().trim();
+            String newParticipant = Objects.requireNonNull(binding.addMeetingInputParticipantText.getText()).toString().trim();
             mViewModel.addParticipant(newParticipant);
-            binding.addMeetingAboutMeTiet.setText("");
+            binding.addMeetingInputParticipantText.setText("");
         });
 
         binding.refreshMeetingParticipantsButton.setOnClickListener(v -> {
@@ -102,42 +107,57 @@ public class AddMeetingActivity extends AppCompatActivity {
 
     private void setupTimePicker() {
         binding.addMeetingTimePickerButton.setOnClickListener(view -> {
-            MaterialTimePicker timePicker = new MaterialTimePicker.Builder()
-                    .setTimeFormat(TimeFormat.CLOCK_24H)
-                    .setHour(12)
-                    .setMinute(0)
-                    .setTitleText("Set Start Time")
-                    .build();
-            timePicker.show(getSupportFragmentManager(), "Material_Time_Picker");
-            timePicker.addOnPositiveButtonClickListener(view1 -> {
-                int hour = timePicker.getHour();
-                int minute = timePicker.getMinute();
-                selectedTime = LocalTime.of(hour, minute);
-                binding.addMeetingTimePickerText.setText(String.format("%02d:%02d", hour, minute));
+            configureTimePickers((timePicker, hourOfDay, mMinute) -> {
+                pickedStartHour = hourOfDay;
+                pickedStartMinute = mMinute;
+                binding.addMeetingTimePickerText.setText(String.format(Locale.FRANCE, "%02d:%02d", hourOfDay, mMinute));
+                selectedTime = LocalTime.parse(binding.addMeetingTimePickerText.getText());
+                Log.d("Kevin",""+selectedTime);
             });
         });
     }
 
+    private void configureTimePickers(
+            @NonNull TimePickerDialog.OnTimeSetListener listener) {
+        Calendar cal = Calendar.getInstance();
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int minute = cal.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, listener, hour, minute, true);
+        if (pickedStartHour != null && pickedStartMinute != null) {
+            timePickerDialog.updateTime(pickedStartHour, pickedStartMinute);
+        }
+        timePickerDialog.show();
+    }
+
     private void setupDatePicker() {
         binding.addMeetingDatePickerButton.setOnClickListener(view -> {
-            // Construisez la contrainte pour n'autoriser que les dates à partir d'aujourd'hui
-            CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder();
-            constraintsBuilder.setValidator(DateValidatorPointForward.now());
+            Locale.setDefault(Locale.FRANCE);
 
-            // Créez le sélecteur de date avec la contrainte
-            MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-                    .setTitleText("Select Date")
-                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                    .setCalendarConstraints(constraintsBuilder.build())
-                    .build();
+            final Calendar now = Calendar.getInstance();
+            int mYear = now.get(Calendar.YEAR);
+            int mMonth = now.get(Calendar.MONTH);
+            int mDay = now.get(Calendar.DAY_OF_MONTH);
 
-            datePicker.show(getSupportFragmentManager(), "Material_Date_Picker");
-            datePicker.addOnPositiveButtonClickListener(selection -> {
-                long selectedDateInMillis = selection;
-                selectedDate = Instant.ofEpochMilli(selectedDateInMillis).atZone(ZoneId.systemDefault()).toLocalDate();
-                binding.addMeetingDatePickerText.setText(datePicker.getHeaderText());
-            });
+            DatePickerDialog dpd = new DatePickerDialog(this,
+                    (view1, year, monthOfYear, dayOfMonth) -> {
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(Calendar.MONTH, monthOfYear);
+                        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        cal.set(Calendar.YEAR, year);
+                        String date = formatDate(dayOfMonth, monthOfYear + 1, year);
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        selectedDate = LocalDate.parse(date,formatter);
+                        binding.addMeetingDatePickerText.setText(date);
+                    }, mYear, mMonth, mDay);
+            dpd.getDatePicker().setFirstDayOfWeek(Calendar.MONDAY);
+            dpd.getDatePicker().setMinDate(now.getTimeInMillis());
+            dpd.show();
         });
+    }
+
+    private String formatDate(int dayOfMonth, int month, int year) {
+        return String.format(Locale.FRANCE, "%02d/%02d/%04d", dayOfMonth, month, year);
     }
 
     private void setupLocationAdapter() {
