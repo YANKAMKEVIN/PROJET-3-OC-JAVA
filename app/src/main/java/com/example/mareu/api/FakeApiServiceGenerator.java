@@ -10,16 +10,16 @@ import java.util.List;
 
 public class FakeApiServiceGenerator {
     public static List<Meeting> generateMeetings() {
-        List<String> participants = Arrays.asList("participant1@mareu.com", "participant2@mareu.com", "participant3@mareu.com");
+        List<String> participants = Arrays.asList("participant1@lamzone.fr", "participant2@lamzone.fr", "participant3@lamzone.fr");
         List<Meeting> meetings = new ArrayList<>();
 
-        // Génère 10 réunions aléatoires
+        // Utilisez des données statiques pour générer 10 réunions
         for (int i = 0; i < 10; i++) {
             String name = "REUNION " + (char) ('A' + i);
-            LocalTime startTime = LocalTime.of((int) (Math.random() * 24), (int) (Math.random() * 60));
-            LocalDate date = LocalDate.now().plusDays((int) (Math.random() * 30));
-            String location = "Salle " + (int) ((Math.random() * 10) +1);
-            String subject = "C'est une réunion qui consiste à revaloriser les personnes handicapées et après voilà ce qui se fait";
+            LocalTime startTime = LocalTime.of(9 + i, 0);
+            LocalDate date = LocalDate.now().plusDays(i);
+            String location = "Salle " + (i + 1);
+            String subject = "Sujet de la réunion " + (i + 1);
             meetings.add(new Meeting(i, name, startTime, date, location, subject, participants));
         }
         return meetings;

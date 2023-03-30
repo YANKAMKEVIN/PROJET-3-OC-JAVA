@@ -21,6 +21,7 @@ import static org.hamcrest.CoreMatchers.not;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -57,6 +58,9 @@ public class AddMeetingTest {
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
+
+    @Rule
+    public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
     @Before
     public void setUp() {

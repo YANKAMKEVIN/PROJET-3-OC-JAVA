@@ -31,7 +31,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
-
+/**
+ * AddMeetingActivity est la classe appelée lorsqu'on veut ajouter une réunion via l'application Mareu.
+ * Elle permet de rajouter tous les elements necessaire à la création d'une réunion
+  */
 public class AddMeetingActivity extends AppCompatActivity {
 
     private static final int DELAY_MILLISECONDS = 1000;
@@ -82,6 +85,10 @@ public class AddMeetingActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Configure les TextWatchers pour les champs de texte afin de mettre à jour l'interface utilisateur
+     * lorsque le contenu de ces champs change.
+     */
     private void setupTextWatchers() {
         TextWatcher watcher = new TextWatcher() {
             @Override
@@ -105,6 +112,10 @@ public class AddMeetingActivity extends AppCompatActivity {
         binding.addMeetingNameTiet.addTextChangedListener(watcher);
     }
 
+    /**
+     * Configure le TimePicker pour permettre à l'utilisateur de sélectionner l'heure de début
+     * de la réunion.
+     */
     private void setupTimePicker() {
         binding.addMeetingTimePickerButton.setOnClickListener(view -> {
             configureTimePickers((timePicker, hourOfDay, mMinute) -> {
@@ -117,6 +128,13 @@ public class AddMeetingActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Crée et affiche un TimePickerDialog avec les valeurs par défaut définies à partir
+     * de l'heure actuelle. Si l'utilisateur a déjà sélectionné une heure, met à jour le
+     * TimePickerDialog pour refléter cette sélection.
+     *
+     * @param listener Le listener qui sera appelé lorsque l'utilisateur sélectionne une heure.
+     */
     private void configureTimePickers(
             @NonNull TimePickerDialog.OnTimeSetListener listener) {
         Calendar cal = Calendar.getInstance();
@@ -130,6 +148,10 @@ public class AddMeetingActivity extends AppCompatActivity {
         timePickerDialog.show();
     }
 
+    /**
+     * Configure le DatePicker pour permettre à l'utilisateur de sélectionner la date de
+     * la réunion.
+     */
     private void setupDatePicker() {
         binding.addMeetingDatePickerButton.setOnClickListener(view -> {
             Locale.setDefault(Locale.FRANCE);
@@ -156,15 +178,31 @@ public class AddMeetingActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Formate une date en utilisant le format "dd/MM/yyyy" pour l'affichage.
+     *
+     * @param dayOfMonth Le jour du mois.
+     * @param month Le mois.
+     * @param year L'année.
+     * @return Une chaîne de caractères représentant la date formatée.
+     */
     private String formatDate(int dayOfMonth, int month, int year) {
         return String.format(Locale.FRANCE, "%02d/%02d/%04d", dayOfMonth, month, year);
     }
 
+    /**
+     * Configure l'adaptateur pour le champ de sélection de l'emplacement.
+     */
     private void setupLocationAdapter() {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, getResources().getStringArray(R.array.rooms));
         binding.addMeetingLocationTiet.setAdapter(adapter);
     }
 
+    /**
+     * Met à jour l'interface utilisateur en fonction des entrées de l'utilisateur.
+     * Active ou désactive le bouton d'ajout de réunion en fonction du remplissage de tous
+     * les champs obligatoires et configure le bouton pour créer et ajouter une réunion.
+     */
     private void updateUI() {
         String location = binding.addMeetingLocationTiet.getText().toString();
         String subject = binding.adMeetingSubjectTiet.getText().toString();
@@ -194,7 +232,10 @@ public class AddMeetingActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Configure l'observateur pour la liste des participants et met à jour l'affichage
+     * de la liste des participants lorsque celle-ci change.
+     */
     private void setupParticipantsObserver() {
         mViewModel.getParticipantsLiveData().observe(this, participants -> {
             if (participants.size() > 0) {
@@ -204,6 +245,12 @@ public class AddMeetingActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Gère la sélection des éléments de menu dans l'activité.
+     *
+     * @param item L'élément de menu sélectionné.
+     * @return true si l'événement a été consommé, sinon false.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
