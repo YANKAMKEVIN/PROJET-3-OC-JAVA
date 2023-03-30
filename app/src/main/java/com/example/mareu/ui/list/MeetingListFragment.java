@@ -26,6 +26,11 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * La classe MeetingListFragment est responsable de l'affichage de la liste des réunions.
+ * Elle utilise le MeetingListViewModel pour interagir avec les données et mettre à jour
+ * l'affichage en fonction des changements de données.
+ */
 public class MeetingListFragment extends Fragment {
     RecyclerView mRecyclerView;
     MeetingListViewModel mViewModel;
@@ -46,20 +51,20 @@ public class MeetingListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Get the ViewModel
+        // Récupérez le ViewModel
         mViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MeetingListViewModel.class);
 
-        // Setup the RecyclerView
-        mRecyclerView = view.findViewById(R.id.recycler_cv);
+        // Configurez le RecyclerView
+        mRecyclerView = view.findViewById(R.id.list_meetings_rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
 
-        // Create and set the adapter with lambda for OnMeetingClickListener
+        // Créez et définissez l'adaptateur avec une lambda pour OnMeetingClickListener
         MeetingListAdapter adapter = new MeetingListAdapter(mViewModel::onDeleteMeetingClicked);
         mRecyclerView.setAdapter(adapter);
 
-        // Observe data changes
-        // Initialize the observer
+        // Observez les changements de données
+        // Initialisez l'observateur
         mViewModel.getMeetingListViewStateItemLiveData().observe(getViewLifecycleOwner(), meetingListObserver);
 
         // Dans votre activité ou fragment
@@ -68,8 +73,7 @@ public class MeetingListFragment extends Fragment {
             // Par exemple, vous pouvez utiliser un Toast ou un Snackbar
             Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show();
         });
-        // Show the seekbar for one second
-        showSeekBarForOneSecond();
+        //showSeekBarForOneSecond();
     }
 
     private final Observer<List<MeetingListViewStateItem>> meetingListObserver = meetingListViewStateItems -> {
@@ -80,10 +84,14 @@ public class MeetingListFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // N'oubliez pas de vous désinscrire lorsque le fragment est détruit
         EventBus.getDefault().unregister(this);
     }
 
+    /**
+     * Filtre la liste des réunions en fonction du lieu.
+     *
+     * @param location Le lieu à utiliser pour filtrer la liste des réunions.
+     */
     public void filterByLocation(String location) {
         // Show the seekbar for one second
         mViewModel.setLocationFilter(location);
@@ -92,6 +100,11 @@ public class MeetingListFragment extends Fragment {
 
     }
 
+    /**
+     * Filtre la liste des réunions en fonction de la date.
+     *
+     * @param date La date à utiliser pour filtrer la liste des réunions.
+     */
     public void filterByDate(LocalDate date) {
         mViewModel.setDateFilter(date);
         showSeekBarForOneSecond();
@@ -99,11 +112,18 @@ public class MeetingListFragment extends Fragment {
 
     }
 
+    /**
+     * Réinitialise les filtres et affiche toutes les réunions.
+     */
     public void resetFilter() {
         mViewModel.resetFilters();
         mViewModel.getMeetingListViewStateItemLiveData().observe(getViewLifecycleOwner(), meetingListObserver);
     }
 
+
+    /**
+     * Affiche une barre de progression pendant une seconde.
+     */
     public void showSeekBarForOneSecond() {
         // Créer la seekbar
         ProgressBar spinner = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleLarge);

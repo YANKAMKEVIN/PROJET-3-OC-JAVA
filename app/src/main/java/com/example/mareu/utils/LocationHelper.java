@@ -1,7 +1,18 @@
 package com.example.mareu.utils;
 
 import com.example.mareu.R;
+
+/**
+ * La classe LocationHelper fournit des méthodes utilitaires pour gérer les salles de réunion.
+ */
 public class LocationHelper {
+
+    /**
+     * Retourne l'ID de la couleur correspondant à la salle de réunion spécifiée.
+     *
+     * @param location le nom de la salle de réunion
+     * @return l'ID de la couleur associée à la salle de réunion
+     */
     public static int getColorIdFromLocation(String location) {
         switch (location) {
             case "Salle 1":

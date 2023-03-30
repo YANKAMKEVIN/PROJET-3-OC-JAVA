@@ -1,11 +1,8 @@
 package com.example.mareu.ui.list;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
@@ -17,19 +14,42 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * La classe MeetingListViewModel est responsable de la gestion de l'état et des actions
+ * associées à la liste des réunions. Elle interagit avec le MeetingRepository pour obtenir
+ * les données des réunions et les transforme en MeetingListViewStateItem pour être utilisées
+ * dans la vue.
+ */
 public class MeetingListViewModel extends ViewModel {
     @NonNull
     private final MeetingRepository meetingRepository;
     private final SingleLiveEvent<String> showEmptyListErrorEvent = new SingleLiveEvent<>();
     private String currentLocationFilter = null;
     private LocalDate currentDateFilter = null;
-    public SingleLiveEvent<String> getShowEmptyListErrorEvent() {
-        return showEmptyListErrorEvent;
-    }
+
+    /**
+     * Construit un nouvel objet MeetingListViewModel en utilisant le MeetingRepository spécifié.
+     *
+     * @param meetingRepository le dépôt de données pour les réunions
+     */
     public MeetingListViewModel(@NonNull MeetingRepository meetingRepository) {
         this.meetingRepository = meetingRepository;
     }
 
+    /**
+     * Retourne l'événement pour afficher une erreur de liste vide.
+     *
+     * @return l'événement pour afficher une erreur de liste vide
+     */
+    public SingleLiveEvent<String> getShowEmptyListErrorEvent() {
+        return showEmptyListErrorEvent;
+    }
+
+    /**
+     * Retourne la liste des réunions sous forme de MeetingListViewStateItem LiveData.
+     *
+     * @return la liste des réunions sous forme de MeetingListViewStateItem LiveData
+     */
     public LiveData<List<MeetingListViewStateItem>> getMeetingListViewStateItemLiveData() {
 
         return Transformations.map(meetingRepository.getMeetingsLiveData(), meetings -> {
@@ -72,18 +92,38 @@ public class MeetingListViewModel extends ViewModel {
         });
     }
 
+
+    /**
+     * Définit le filtre de localisation à utiliser lors de la récupération des réunions.
+     *
+     * @param location la localisation à filtrer, ou null pour ne pas filtrer par localisation
+     */
     public void setLocationFilter(@Nullable String location) {
         currentLocationFilter = location;
     }
 
+    /**
+     * Définit le filtre de date à utiliser lors de la récupération des réunions.
+     *
+     * @param date la date à filtrer, ou null pour ne pas filtrer par date
+     */
     public void setDateFilter(@Nullable LocalDate date) {
         currentDateFilter = date;
     }
 
+    /**
+     * Réinitialise les filtres de localisation et de date.
+     */
     public void resetFilters() {
         currentLocationFilter = null;
         currentDateFilter = null;
     }
+
+    /**
+     * Supprime une réunion en fonction de l'ID de la réunion spécifié.
+     *
+     * @param meetingId l'ID de la réunion à supprimer
+     */
     public void onDeleteMeetingClicked(long meetingId) {
         meetingRepository.deleteMeeting(meetingId);
     }

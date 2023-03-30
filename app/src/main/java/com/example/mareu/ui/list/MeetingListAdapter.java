@@ -18,10 +18,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mareu.R;
 import com.example.mareu.utils.LocationHelper;
 
-
+/**
+ * Un adaptateur pour afficher les éléments de la liste des réunions dans un RecyclerView.
+ */
 public class MeetingListAdapter extends ListAdapter<MeetingListViewStateItem, MeetingListAdapter.ViewHolder> {
     private final OnMeetingCLickListener listener;
 
+    /**
+     * Construit un nouvel adaptateur MeetingListAdapter.
+     *
+     * @param listener Le listener pour les événements de clic sur les réunions.
+     */
     public MeetingListAdapter(OnMeetingCLickListener listener) {
         super(new MeetingDiffCallback());
         this.listener = listener;
@@ -39,7 +46,9 @@ public class MeetingListAdapter extends ListAdapter<MeetingListViewStateItem, Me
         holder.bind(getItem(position), listener);
     }
 
-
+    /**
+     * Un ViewHolder pour afficher les éléments d'une réunion dans un RecyclerView.
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView meetingInfos;
         private final TextView participants;
@@ -54,6 +63,13 @@ public class MeetingListAdapter extends ListAdapter<MeetingListViewStateItem, Me
             imageCircle = itemView.findViewById(R.id.room_color);
         }
 
+
+        /**
+         * Lie les données de l'élément MeetingListViewStateItem au ViewHolder.
+         *
+         * @param item     L'élément MeetingListViewStateItem contenant les données de la réunion.
+         * @param listener Le listener pour les événements de clic sur les réunions.
+         */
         public void bind(MeetingListViewStateItem item, OnMeetingCLickListener listener) {
             meetingInfos.setText(String.join(" - ", item.getName(), item.getStartTime().toString(), item.getLocation()));
             String participantsString = item.getParticipants().toString();

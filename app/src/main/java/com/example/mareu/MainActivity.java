@@ -19,6 +19,12 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.time.LocalDate;
 
+
+/**
+ * MainActivity est la classe principale de l'application Mareu.
+ * Elle gère l'affichage de la liste des réunions, les interactions utilisateur
+ * et les actions pour filtrer et réinitialiser les filtres.
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -32,14 +38,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.meeting_filter_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
+        // Gere le click sur un item du menu
         switch (item.getItemId()) {
             case R.id.action_filter_by_location:
                 showLocationFilterDialog();
@@ -55,10 +60,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Réinitialise les filtres et met à jour la liste des réunions.
+     */
     private void resetFilterDialog() {
         EventBus.getDefault().post(new ResetFilterEvent());
     }
 
+    /**
+     * Affiche un dialogue permettant à l'utilisateur de sélectionner un lieu pour filtrer
+     * la liste des réunions, puis met à jour la liste en fonction du lieu sélectionné.
+     */
     private void showLocationFilterDialog() {
         // Show a dialog or dropdown list to allow the user to select a location to filter the list of meetings
         // Then update the list of meetings based on the selected location
@@ -73,6 +85,10 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
+    /**
+     * Affiche un dialogue permettant à l'utilisateur de sélectionner une date pour filtrer
+     * la liste des réunions, puis met à jour la liste en fonction de la date sélectionnée.
+     */
     private void showDateFilterDialog() {
         // Show a dialog to allow the user to select a date to filter the list of meetings
         // Then update the list of meetings based on the selected date

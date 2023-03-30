@@ -5,6 +5,10 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Représente une réunion, avec un nom, une heure de début, une date, un lieu, un sujet et une liste de participants.
+ * Cette classe est utilisée pour stocker les données des réunions et les transmettre à travers l'application.
+ */
 public class Meeting {
 
     private long id;
