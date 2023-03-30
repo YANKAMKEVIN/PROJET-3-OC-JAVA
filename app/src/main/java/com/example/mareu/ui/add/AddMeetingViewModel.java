@@ -14,21 +14,38 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * ViewModel pour la fonctionnalité d'ajout de réunion.
+ */
 public class AddMeetingViewModel extends ViewModel {
     @NonNull
     private final MeetingRepository meetingRepository;
     private final MutableLiveData<List<String>> participantsLiveData = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<String> errorMessageLiveData = new MutableLiveData<>();
 
+    /**
+     * Retourne la liste des participants.
+     *
+     * @return LiveData<List<String>> représentant la liste des participants
+     */
     public LiveData<List<String>> getParticipantsLiveData() {
         return participantsLiveData;
     }
 
+    /**
+     * Retourne le message d'erreur.
+     *
+     * @return LiveData<String> représentant le message d'erreur
+     */
     public LiveData<String> getErrorMessageLiveData() {
         return errorMessageLiveData;
     }
 
+    /**
+     * Ajoute un participant à la liste des participants s'il est valide et si la liste n'est pas pleine.
+     *
+     * @param newParticipant String représentant l'adresse e-mail du participant à ajouter
+     */
     public void addParticipant(String newParticipant) {
         resetErrorMessage();
         List<String> updatedParticipants = participantsLiveData.getValue();
@@ -65,6 +82,12 @@ public class AddMeetingViewModel extends ViewModel {
         onAddButtonClicked(meeting, onMeetingAdded);
     }
 
+    /**
+     * Valide les données de la réunion et l'ajoute au repository si toutes les conditions sont remplies.
+     *
+     * @param meeting Meeting représentant la réunion à ajouter
+     * @param callback MeetingSavedCallback qui sera appelé lorsque la réunion est ajoutée avec succès
+     */
     @SuppressLint("DefaultLocale")
     public void onAddButtonClicked(
             @NonNull Meeting meeting,
