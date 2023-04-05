@@ -4,9 +4,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
-import android.util.Log;
-
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule; // Importez cette classe
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.mareu.api.ApiService;
@@ -15,7 +13,7 @@ import com.example.mareu.model.Meeting;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule; // Importez cette classe
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -31,7 +29,7 @@ public class MeetingServiceTest {
 
     private ApiService service;
 
-    @Rule // Ajoutez cette règle
+    @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
     private static int ITEMS_COUNT = 10;
 
@@ -50,21 +48,23 @@ public class MeetingServiceTest {
         Meeting meeting = new Meeting(11, "Test meeting", LocalTime.of(20, 0), LocalDate.now(), "Salle 11", "Sujet de test", Arrays.asList("test1@lamzone.fr", "test2@lamzone.fr"));
         service.addMeeting(meeting);
         assertTrue(service.getMeetingsLiveData().getValue().contains(meeting));
-        assertTrue(service.getMeetingsLiveData().getValue().size() == ITEMS_COUNT +1);
+        assertTrue(service.getMeetingsLiveData().getValue().size() == ITEMS_COUNT + 1);
     }
 
     @Test
     public void testDeleteMeeting() {
         long meetingIdToDelete = 1;
         List<Meeting> meetingsBeforeDeletion = service.getMeetingsLiveData().getValue();
+        Assert.assertTrue(service.getMeetingsLiveData().getValue().size() == ITEMS_COUNT);
         assertNotNull(meetingsBeforeDeletion);
         assertTrue(meetingsBeforeDeletion.stream().anyMatch(meeting -> meeting.getId() == meetingIdToDelete));
         service.deleteMeeting(meetingIdToDelete);
         List<Meeting> meetingsAfterDeletion = service.getMeetingsLiveData().getValue();
         assertNotNull(meetingsAfterDeletion);
         assertFalse(meetingsAfterDeletion.stream().anyMatch(meeting -> meeting.getId() == meetingIdToDelete));
-        assertTrue(meetingsBeforeDeletion.size()  == meetingsAfterDeletion.size());
+        assertTrue(meetingsBeforeDeletion.size() == meetingsAfterDeletion.size());
     }
+
     @Test
     public void addMeetingWithEmptyName_shouldNotAddMeeting() {
         // Arrange

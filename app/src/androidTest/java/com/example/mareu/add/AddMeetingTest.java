@@ -101,7 +101,7 @@ public class AddMeetingTest {
 
         onView(withId(R.id.add_meeting_button)).perform(click());
         pressBack();
-        onView(isRoot()).perform(waitFor(10000));
+        onView(isRoot()).perform(waitFor(5000));
 
         onView(withId(R.id.list_meetings_rv)).check(matches(hasChildCount(ITEMS_COUNT )));
     }
@@ -147,15 +147,4 @@ public class AddMeetingTest {
                         withParent(IsInstanceOf.instanceOf(android.view.ViewGroup.class)))),
                 isDisplayed()));
     }
-/*
-
-    @Test
-    public void onAddingInvalidMail_shouldDisplayError() {
-        onView(withId(R.id.main_fab_add)).perform(click());
-
-        onView(withId(R.id.participants_input)).perform(replaceText(INVALID_PARTICIPANT_MAIL));
-        onView(withId(R.id.add_participant_fab)).perform(click());
-        onView(withId(R.id.participants_layout)).check(matches(hasDescendant(
-                withText(R.string.invalid_email_input))));
-    }*/
 }
